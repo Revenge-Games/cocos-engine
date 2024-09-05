@@ -25,7 +25,7 @@ jobs:
           cd native
           git clone https://github.com/cocos/cocos-engine-external external
           cd external
-          git checkout -b branch_name tag
+          git checkout v3.8.4
       - name: Zip artifact
         run: |
           zip -r artifact.zip * -x "*/.git/*"  -x "*/node_modules/*"
