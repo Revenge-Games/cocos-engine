@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
       - run: |
           cd native
-          git clone git clone https://github.com/cocos/cocos-engine-external external
+          git clone https://github.com/cocos/cocos-engine-external external
           cd external
           git checkout -b branch_name tag
       - name: Zip artifact
