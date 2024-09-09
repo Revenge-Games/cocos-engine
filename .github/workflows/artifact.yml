@@ -26,9 +26,11 @@ jobs:
           cd native
           npm install
           gulp init
+      - name: Install GitHub CLI
+        run: npm install
       - name: Zip artifact
         run: |
-          zip -r artifact.zip * -x "*/.git/*"  -x "*/node_modules/*"
+          zip -r artifact.zip * -x "*/.git/*"
       - name: Install GitHub CLI
         run: sudo apt-get install gh
       - name: Create release
