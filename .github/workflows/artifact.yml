@@ -10,7 +10,7 @@ on:
 
 jobs:    
   publish_artifact:
-    name: Build and publish release
+    name: Build and publish release 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,10 +22,10 @@ jobs:
           node-version: latest
           cache: 'npm'
       - run: |
+          npm install -g gulp
           cd native
-          git clone https://github.com/cocos/cocos-engine-external external
-          cd external
-          git checkout v3.8.4
+          npm install
+          gulp init
       - name: Zip artifact
         run: |
           zip -r artifact.zip * -x "*/.git/*"  -x "*/node_modules/*"
