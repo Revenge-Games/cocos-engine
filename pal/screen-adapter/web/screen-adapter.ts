@@ -454,8 +454,6 @@ class ScreenAdapter extends EventTarget {
                 this._gameFrame.style['-webkit-transform-origin'] = '0px 0px 0px';
                 this._gameFrame.style.transformOrigin = '0px 0px 0px';
                 this._gameFrame.style.margin = `0 0 0 ${winWidth}px`;
-                this._gameFrame.style.width = `${winHeight}px`;
-                this._gameFrame.style.height = `${winWidth}px`;
             } else {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(0deg)';
                 this._gameFrame.style.transform = 'rotate(0deg)';
@@ -463,8 +461,11 @@ class ScreenAdapter extends EventTarget {
                 // this._gameFrame.style['-webkit-transform-origin'] = '0px 0px 0px';
                 // this._gameFrame.style.transformOrigin = '0px 0px 0px';
                 this._gameFrame.style.margin = '0px auto';
-                this._gameFrame.style.width = `${winWidth}px`;
-                this._gameFrame.style.height = `${winHeight}px`;
+            }
+
+            if (this._gameFrame.parentElement) {
+                this._gameFrame.parentElement.style.width = `${winHeight}px`;
+                this._gameFrame.parentElement.style.height = `${winHeight}px`;
             }
         }
 
