@@ -447,7 +447,9 @@ class ScreenAdapter extends EventTarget {
             this._gameFrame.style.width = `${sizeInCssPixels.width}px`;
             this._gameFrame.style.height = `${sizeInCssPixels.height}px`;
         } else {
-            const winWidth = window.innerWidth; const winHeight = window.innerHeight;
+            if(this._gameFrame.parentElement === null) return;
+
+            const winWidth = this._gameFrame.parentElement.clientWidth; const winHeight = this._gameFrame.parentElement.clientHeight;
             if (this.isFrameRotated) {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(90deg)';
                 this._gameFrame.style.transform = 'rotate(90deg)';
@@ -464,8 +466,8 @@ class ScreenAdapter extends EventTarget {
             }
 
             if (this._gameFrame.parentElement) {
-                this._gameFrame.parentElement.style.width = `${winHeight}px`;
-                this._gameFrame.parentElement.style.height = `${winHeight}px`;
+                this._gameFrame.style.width = `${winWidth}px`;
+                this._gameFrame.style.height = `${winHeight}px`;
             }
         }
 
