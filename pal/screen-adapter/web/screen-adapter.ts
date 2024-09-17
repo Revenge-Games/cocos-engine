@@ -524,21 +524,25 @@ class ScreenAdapter extends EventTarget {
             this._gameFrame.style.width = `${sizeInCssPixels.width}px`;
             this._gameFrame.style.height = `${sizeInCssPixels.height}px`;
         } else {
-            const winWidth = window.innerWidth;
-            let winHeight = window.innerHeight;
-            //On certain android devices, window.innerHeight may not account for the height of the virtual keyboard, so dynamic calculation is necessary.
-            const inputHeight = document.body.scrollHeight - winHeight;
-            if (systemInfo.os === OS.ANDROID && winHeight < inputHeight) {
-                winHeight += inputHeight;
-            }
+            // const winWidth = window.innerWidth;
+            // let winHeight = window.innerHeight;
+            // //On certain android devices, window.innerHeight may not account for the height of the virtual keyboard, so dynamic calculation is necessary.
+            // const inputHeight = document.body.scrollHeight - winHeight;
+            // if (systemInfo.os === OS.ANDROID && winHeight < inputHeight) {
+            //     winHeight += inputHeight;
+            // }
+
+            if(this._gameFrame.parentElement === null) return;
+
+            const winWidth = this._gameFrame.parentElement.clientWidth;
+            const winHeight = this._gameFrame.parentElement.clientHeight;
+
             if (this.isFrameRotated) {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(90deg)';
                 this._gameFrame.style.transform = 'rotate(90deg)';
                 this._gameFrame.style['-webkit-transform-origin'] = '0px 0px 0px';
                 this._gameFrame.style.transformOrigin = '0px 0px 0px';
                 this._gameFrame.style.margin = `0 0 0 ${winWidth}px`;
-                this._gameFrame.style.width = `${winHeight}px`;
-                this._gameFrame.style.height = `${winWidth}px`;
             } else {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(0deg)';
                 this._gameFrame.style.transform = 'rotate(0deg)';
@@ -546,6 +550,9 @@ class ScreenAdapter extends EventTarget {
                 // this._gameFrame.style['-webkit-transform-origin'] = '0px 0px 0px';
                 // this._gameFrame.style.transformOrigin = '0px 0px 0px';
                 this._gameFrame.style.margin = '0px auto';
+            }
+
+            if (this._gameFrame.parentElement) {
                 this._gameFrame.style.width = `${winWidth}px`;
                 this._gameFrame.style.height = `${winHeight}px`;
             }
