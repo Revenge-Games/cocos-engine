@@ -449,7 +449,8 @@ class ScreenAdapter extends EventTarget {
         } else {
             if(this._gameFrame.parentElement === null) return;
 
-            const winWidth = this._gameFrame.parentElement.clientWidth; const winHeight = this._gameFrame.parentElement.clientHeight;
+            const winWidth = this._gameFrame.parentElement.clientWidth; 
+            const winHeight = this._gameFrame.parentElement.clientHeight;
             if (this.isFrameRotated) {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(90deg)';
                 this._gameFrame.style.transform = 'rotate(90deg)';
