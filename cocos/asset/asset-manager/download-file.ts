@@ -1,3 +1,4 @@
+import { downloadErrorManager } from './download-error-manager';
 /*
  Copyright (c) 2019-2023 Xiamen Yaji Software Co., Ltd.
 
@@ -29,11 +30,11 @@ export default function downloadFile (
     options: Record<string, any>,
     onProgress: FileProgressCallback | null | undefined,
     onComplete: ((err: Error | null, data?: any) => void),
-): XMLHttpRequest {
+): XMLHttpRequest {   
     const xhr = new XMLHttpRequest();
     const errInfo = `download failed: ${url}, status: `;
-
     xhr.open('GET', url, true);
+    downloadErrorManager.addDownloadFile({url, options, onProgress, onComplete, xhr});
 
     if (options.xhrResponseType !== undefined) { xhr.responseType = options.xhrResponseType as XMLHttpRequestResponseType; }
     if (options.xhrWithCredentials !== undefined) { xhr.withCredentials = options.xhrWithCredentials as boolean; }
@@ -48,8 +49,14 @@ export default function downloadFile (
 
     xhr.onload = (): void => {
         if (xhr.status === 200 || xhr.status === 0) {
+            // console.log(`%cDownload-file remove ${url}`, 'background: #ffe6cc;');
             if (onComplete) { onComplete(null, xhr.response); }
-        } else if (onComplete) { onComplete(new Error(`${errInfo}${xhr.status}(no response)`)); }
+        } else {
+            if(downloadErrorManager.enabled) return;
+            if (onComplete) { 
+                onComplete(new Error(`${errInfo}${xhr.status}(no response)`)); 
+            }
+        }
     };
 
     if (onProgress) {
@@ -61,15 +68,18 @@ export default function downloadFile (
     }
 
     xhr.onerror = (): void => {
-        if (onComplete) { onComplete(new Error(`${errInfo}${xhr.status}(error)`)); }
+        if(downloadErrorManager.enabled) return;
+        onComplete(new Error(`${errInfo}${xhr.status}(no response)`)); 
     };
 
     xhr.ontimeout = (): void => {
-        if (onComplete) { onComplete(new Error(`${errInfo}${xhr.status}(time out)`)); }
+        if(downloadErrorManager.enabled) return;
+        onComplete(new Error(`${errInfo}${xhr.status}(no response)`)); 
     };
 
     xhr.onabort = (): void => {
-        if (onComplete) { onComplete(new Error(`${errInfo}${xhr.status}(abort)`)); }
+        if(downloadErrorManager.enabled) return;
+        onComplete(new Error(`${errInfo}${xhr.status}(no response)`)); 
     };
 
     xhr.send(null);
