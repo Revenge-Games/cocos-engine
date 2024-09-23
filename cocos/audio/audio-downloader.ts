@@ -44,10 +44,12 @@ export function loadAudioPlayer (url: string, options: Record<string, any>, onCo
     });
 }
 
-function createAudioClip (id: string,
+function createAudioClip (
+    id: string,
     data: AudioMeta,
     options: Record<string, any>,
-    onComplete: ((err: Error | null, data?: AudioClip | null) => void)): void {
+    onComplete: ((err: Error | null, data?: AudioClip | null) => void),
+): void {
     const out = new AudioClip();
     out._nativeUrl = id;
     out._nativeAsset = data;
@@ -60,6 +62,7 @@ downloader.register({
     '.ogg': loadAudioPlayer,
     '.wav': loadAudioPlayer,
     '.m4a': loadAudioPlayer,
+    '.opus': loadAudioPlayer,
 });
 
 factory.register({
@@ -68,4 +71,5 @@ factory.register({
     '.ogg': createAudioClip,
     '.wav': createAudioClip,
     '.m4a': createAudioClip,
+    '.opus': createAudioClip,
 });
