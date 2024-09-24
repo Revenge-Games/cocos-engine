@@ -50,7 +50,10 @@ export default function downloadFile (
     xhr.onload = (): void => {
         if (xhr.status === 200 || xhr.status === 0) {
             // console.log(`%cDownload-file remove ${url}`, 'background: #ffe6cc;');
-            if (onComplete) { onComplete(null, xhr.response); }
+            if (onComplete) { 
+                onComplete(null, xhr.response);
+                downloadErrorManager.onComplete(url);
+             }
         } else {
             if(downloadErrorManager.enabled) return;
             if (onComplete) { 
