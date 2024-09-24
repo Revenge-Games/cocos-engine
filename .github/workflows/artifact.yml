@@ -27,16 +27,16 @@ jobs:
           gulp init
       - name: Install npm
         run: npm install
-      - name: Zip artifact
+      - name: Zip release
         run: |
-          zip -r artifact.zip * -x "*/.git/*"
+          zip -r release-v1.0.${{ github.run_number }}.${{ github.run_attempt }}.zip * -x "*/.git/*"
       - name: Install GitHub CLI
         run: sudo apt-get install gh
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          gh release create v1.0.${{ github.run_number }}.${{ github.run_attempt }} artifact.zip  \
+          gh release create v1.0.${{ github.run_number }}.${{ github.run_attempt }} release-v1.0.${{ github.run_number }}.${{ github.run_attempt }}.zip  \
               --repo="${{ github.repository }}" \
               --title=""${{ github.repository }}" v1.0.${{ github.run_number }}.${{ github.run_attempt }}" \
               --generate-notes
