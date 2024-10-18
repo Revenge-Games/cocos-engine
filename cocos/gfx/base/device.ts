@@ -141,6 +141,18 @@ export abstract class Device {
         return this._bindingMappingInfo;
     }
 
+    get astcSupportedProfiles (): string[] {
+        return this._astcSupportedProfiles;
+    }
+
+    get astcOnlyLdr (): boolean {
+        return this._astcOnlyLdr;
+    }
+
+    get isSupportedTexFloatLinear (): boolean {
+        return this._isSupportedTexFloatLinear;
+    }
+
     protected _gfxAPI = API.UNKNOWN;
     protected _renderer = '';
     protected _vendor = '';
@@ -158,6 +170,9 @@ export abstract class Device {
     protected _generalBarrierss = new Map<number, GeneralBarrier>();
     protected _textureBarriers = new Map<number, TextureBarrier>();
     protected _bufferBarriers = new Map<number, BufferBarrier>();
+    protected _astcSupportedProfiles: string[] = [];
+    protected _astcOnlyLdr = false;
+    protected _isSupportedTexFloatLinear = false;
 
     public static canvas: HTMLCanvasElement; // Hack for WebGL device initialization process
 

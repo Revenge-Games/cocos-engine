@@ -404,6 +404,7 @@ export class WebGL2Device extends Device {
             this._textureExclusive[Format.RGBA16F] = false;
         }
 
+        this._isSupportedTexFloatLinear = !!exts.OES_texture_float_linear;
         if (exts.OES_texture_float_linear) {
             this._formatFeatures[Format.RGB32F] |= FormatFeatureBit.LINEAR_FILTER;
             this._formatFeatures[Format.RGBA32F] |= FormatFeatureBit.LINEAR_FILTER;
@@ -452,6 +453,9 @@ export class WebGL2Device extends Device {
         }
 
         if (exts.WEBGL_compressed_texture_astc) {
+            this._astcSupportedProfiles = exts.WEBGL_compressed_texture_astc.getSupportedProfiles();
+            this._astcOnlyLdr = !this._astcSupportedProfiles.includes('hdr');
+
             this._formatFeatures[Format.ASTC_RGBA_4X4] = compressedFeature;
             this._formatFeatures[Format.ASTC_RGBA_5X4] = compressedFeature;
             this._formatFeatures[Format.ASTC_RGBA_5X5] = compressedFeature;
