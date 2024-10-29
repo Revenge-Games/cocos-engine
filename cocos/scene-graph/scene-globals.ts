@@ -1715,5 +1715,17 @@ export class SceneGlobals {
         const root = legacyCC.director.root as Root;
         root.onGlobalPipelineStateChanged();
     }
+
+    public destroy (): void {
+        this._skybox = null;
+        this.ambient = null;
+
+        this.shadows = null;
+        this.fog = null;
+        this.octree = null;
+        this.skin = null;
+        this.postSettings = null;
+        this.lightProbeInfo = null;
+    }
 }
 legacyCC.SceneGlobals = SceneGlobals;

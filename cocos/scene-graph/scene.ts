@@ -107,6 +107,8 @@ export class Scene extends Node {
             }
         }
         if (this._renderScene) legacyCC.director.root.destroyScene(this._renderScene);
+        this._globals.destroy();
+        this._globals = null;
         this._active = false;
         this._activeInHierarchy = false;
         return success;
