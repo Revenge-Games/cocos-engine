@@ -22,6 +22,8 @@
  THE SOFTWARE.
 */
 
+import { legacyCC } from '../../cocos/core/global-exports';
+
 interface CachedAudioBufferData {
     usedCount: number,
     audioBuffer: AudioBuffer,
@@ -76,3 +78,4 @@ class AudioBufferManager {
 }
 
 export const audioBufferManager = new AudioBufferManager();
+legacyCC.audioBufferManager = audioBufferManager;

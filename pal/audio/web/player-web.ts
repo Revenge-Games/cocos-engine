@@ -32,6 +32,7 @@ import AudioTimer from '../audio-timer';
 import { audioBufferManager } from '../audio-buffer-manager';
 import { Game, game } from '../../../cocos/game';
 import { canvasId } from '../../utils';
+import { legacyCC } from '../../../cocos/core/global-exports';
 
 // NOTE: fix CI
 const AudioContextClass = (window.AudioContext || window.webkitAudioContext || window.mozAudioContext);
@@ -54,6 +55,10 @@ export class AudioContextAgent {
                 this._isRunning = false;
             }
         };
+    }
+
+    get context (): AudioContext {
+        return this._context;
     }
 
     get isRunning (): boolean {
@@ -490,3 +495,6 @@ export class AudioPlayerWeb implements OperationQueueable {
     onEnded (cb: () => void): void { this._eventTarget.on(AudioEvent.ENDED, cb); }
     offEnded (cb?: () => void): void { this._eventTarget.off(AudioEvent.ENDED, cb); }
 }
+
+legacyCC.AudioPlayerWeb = AudioPlayerWeb;
+legacyCC.audioContextAgent = audioContextAgent;
