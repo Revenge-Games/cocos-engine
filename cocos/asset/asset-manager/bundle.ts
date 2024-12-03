@@ -204,6 +204,7 @@ export default class Bundle {
      * @zh 所有待加载的资源数量。
      * @param onProgress.item @en The finished request item. @zh 当前完成的加载项。
      * @param onComplete @en Callback invoked when all assets loaded. @zh 所有资源加载完成后的回调。
+     * @param options
      * @param onComplete.error @en Error message during loading, or null if loaded successfully. @zh 加载过程中的错误信息，如果加载成功则为 null。
      * @param onComplete.assets @en The loaded asset, or null if an error occurred during loading. @zh 已加载的资源，如果加载过程中有错误发生，则为 null。
      *
@@ -225,26 +226,32 @@ export default class Bundle {
         paths: string,
         type: Constructor<T> | null,
         onProgress: ((finished: number, total: number, item: RequestItem) => void) | null,
-        onComplete: ((err: Error | null, data: T) => void) | null): void;
+        onComplete: ((err: Error | null, data: T) => void) | null,
+        options?: {[k: string]: any} | null): void;
     public load<T extends Asset> (
         paths: string[], type: Constructor<T> | null,
         onProgress: ((finished: number, total: number, item: RequestItem) => void) | null,
-        onComplete: ((err: Error | null, data: T[]) => void) | null): void;
-    public load<T extends Asset> (paths: string, onProgress: ((finished: number, total: number, item: RequestItem) => void) | null, onComplete: ((err: Error | null, data: T) => void) | null): void;
-    public load<T extends Asset> (paths: string[], onProgress: ((finished: number, total: number, item: RequestItem) => void) | null, onComplete: ((err: Error | null, data: T[]) => void) | null): void;
-    public load<T extends Asset> (paths: string, onComplete?: ((err: Error | null, data: T) => void) | null): void;
-    public load<T extends Asset> (paths: string[], onComplete?: ((err: Error | null, data: T[]) => void) | null): void;
-    public load<T extends Asset> (paths: string, type: Constructor<T> | null, onComplete?: ((err: Error | null, data: T) => void) | null): void;
-    public load<T extends Asset> (paths: string[], type: Constructor<T> | null, onComplete?: ((err: Error | null, data: T[]) => void) | null): void;
+        onComplete: ((err: Error | null, data: T[]) => void) | null,
+        options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string, onProgress: ((finished: number, total: number, item: RequestItem) => void) | null, onComplete: ((err: Error | null, data: T) => void) | null, options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string[], onProgress: ((finished: number, total: number, item: RequestItem) => void) | null, onComplete: ((err: Error | null, data: T[]) => void) | null, options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string, onComplete?: ((err: Error | null, data: T) => void) | null, options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string[], onComplete?: ((err: Error | null, data: T[]) => void) | null, options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string, type: Constructor<T> | null, onComplete?: ((err: Error | null, data: T) => void) | null, options?: {[k: string]: any} | null): void;
+    public load<T extends Asset> (paths: string[], type: Constructor<T> | null, onComplete?: ((err: Error | null, data: T[]) => void) | null, options?: {[k: string]: any} | null): void;
     public load<T extends Asset> (
         paths: string|string[],
         type?: Constructor<T> | ((finished: number, total: number, item: RequestItem) => void) | ((err: Error | null, data: T|T[]) => void) | null,
         onProgress?: ((finished: number, total: number, item: RequestItem) => void) | ((err: Error | null, data: T|T[]) => void) | null,
         onComplete?: ((err: Error | null, data: T|T[]) => void) | null,
+        options?: {[k: string]: any} | null,
     ): void {
         const { type: _type, onProgress: onProg, onComplete: onComp } = parseLoadResArgs(type, onProgress, onComplete);
-        const options = { __requestType__: RequestType.PATH, type: _type, bundle: this.name, __outputAsArray__: Array.isArray(paths) };
-        cclegacy.assetManager.loadAny(paths, options, onProg, onComp);
+        const opts = { __requestType__: RequestType.PATH, type: _type, bundle: this.name, __outputAsArray__: Array.isArray(paths) };
+        if (options !== undefined) {
+            Object.assign(opts, options);
+        }
+        cclegacy.assetManager.loadAny(paths, opts, onProg, onComp);
     }
 
     /**

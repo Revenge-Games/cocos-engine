@@ -253,10 +253,21 @@ export class Parser {
                 parsed.add(id, data);
             }
             const callbacks = this._parsing.remove(id);
-            for (let i = 0, l = callbacks!.length; i < l; i++) {
-                callbacks![i](err, data);
+            if (callbacks) {
+                for (let i = 0, l = callbacks.length; i < l; i++) {
+                    callbacks[i](err, data);
+                }
             }
         });
+    }
+
+    public removeParsing (ids: string[]): void {
+        for (let i = 0, l = ids.length; i < l; i++) {
+            const id = ids[i];
+            if (this._parsing.has(id)) {
+                this._parsing.remove(id);
+            }
+        }
     }
 }
 

@@ -29,9 +29,7 @@ import downloader from '../asset/asset-manager/downloader';
 import factory from '../asset/asset-manager/factory';
 
 export function loadAudioPlayer (url: string, options: Record<string, any>, onComplete: ((err: Error | null, data?: any | null) => void)): void {
-    AudioPlayer.load(url, {
-        audioLoadMode: options.audioLoadMode,
-    }).then((player) => {
+    AudioPlayer.load(url, options).then((player) => {
         const audioMeta: AudioMeta = {
             player,
             url,

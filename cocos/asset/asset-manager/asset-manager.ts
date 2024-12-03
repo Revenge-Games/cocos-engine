@@ -50,6 +50,7 @@ import Task from './task';
 import { combine, parse, replaceOverrideAsset } from './url-transformer';
 import { asyncify, parseParameters } from './utilities';
 import { IAddressableInfo, IAssetInfo, IPackInfo, ISceneInfo } from './config';
+import interruptManager from './interrupt-manager';
 
 const EVENT_ASSET_MISSING = 'asset-missing';
 /**
@@ -271,6 +272,8 @@ export class AssetManager {
      *
      */
     public cacheManager: CacheManager | null = null;
+
+    public interruptManager = interruptManager;
 
     /**
      * @en

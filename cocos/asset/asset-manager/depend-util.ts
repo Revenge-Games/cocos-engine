@@ -154,6 +154,12 @@ export class DependUtil {
         this._depends.remove(uuid);
     }
 
+    public removeArray (uuids: string[]): void {
+        for (let i = 0, l = uuids.length; i < l; i++) {
+            this.remove(uuids[i]);
+        }
+    }
+
     /**
      * @en
      * Extracts dependency list from serialized data or asset and then store in cache.

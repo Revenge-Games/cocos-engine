@@ -346,6 +346,22 @@ export class Downloader {
         this.remoteBundles = remoteBundles;
     }
 
+    public removeQueueDownloading (ids: string[]): void {
+        for (let i = 0, l = ids.length; i < l; i++) {
+            const id = ids[i];
+            const index  = this._queue.findIndex((x) => x.id === id);
+            if (index > -1) {
+                js.array.removeAt(this._queue, index);
+            }
+
+            if (this._downloading.has(id)) {
+                this._downloading.remove(id);
+            }
+        }
+
+        this._totalNum = 0;
+    }
+
     /**
      * @en
      * Register custom handler if you want to change default behavior or extend downloader to download other format file.
@@ -470,9 +486,11 @@ export class Downloader {
         // when retry finished, invoke callbacks
         const finale = (err: Error | null, result: any): void => {
             if (!err) { files.add(id, result); }
-            const callbacks = this._downloading.remove(id) as ((err: Error | null, data?: any) => void)[];
-            for (let i = 0, l = callbacks.length; i < l; i++) {
-                callbacks[i](err, result);
+            const callbacks = this._downloading.remove(id);
+            if (callbacks) {
+                for (let i = 0, l = callbacks.length; i < l; i++) {
+                    callbacks[i](err, result);
+                }
             }
         };
 

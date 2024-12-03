@@ -71,7 +71,7 @@ export class AudioPlayer {
                     resolve(new AudioPlayer(domPlayer));
                 }).catch((e) => {});
             } else {
-                AudioPlayerWeb.load(url).then((webPlayer) => {
+                AudioPlayerWeb.load(url, opts).then((webPlayer) => {
                     resolve(new AudioPlayer(webPlayer));
                 }).catch((e) => {});
             }

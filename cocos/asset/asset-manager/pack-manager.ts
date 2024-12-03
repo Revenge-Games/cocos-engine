@@ -31,6 +31,7 @@ import downloader from './downloader';
 import { transform } from './helper';
 import RequestItem from './request-item';
 import { files } from './shared';
+import interruptManager from './interrupt-manager';
 
 export type Unpacker = (
     packUuid: string[],
@@ -218,6 +219,13 @@ export class PackManager {
      *
      */
     public load (item: RequestItem, options: Record<string, any> | null, onComplete: ((err: Error | null, data?: any) => void)): void {
+        let gameCode = '';
+        if (options !== null && options.gameCode) {
+            gameCode = options.gameCode as string;
+        }
+
+        interruptManager.addToGameAssets(gameCode, item.id, item.uuid);
+
         // if not in any package, download as uausl
         if (item.isNative || !item.info || !item.info.packs) {
             downloader.download(item.id, item.url, item.ext, item.options, onComplete);
@@ -249,6 +257,7 @@ export class PackManager {
         assertIsTrue(item.config);
         const url = transform(pack.uuid, { ext: pack.ext, bundle: item.config.name }) as string;
 
+        interruptManager.addToGameAssets(gameCode, pack.uuid, item.uuid);
         downloader.download(pack.uuid, url, pack.ext, item.options, (err, data): void => {
             files.remove(pack.uuid);
             if (err) {
@@ -258,6 +267,7 @@ export class PackManager {
             this.unpack(pack.packedUuids, data, pack.ext, item.options, (err2, result): void => {
                 if (!err2) {
                     for (const id in result) {
+                        interruptManager.addToGameAssets(gameCode, id, pack.uuid);
                         files.add(id, result[id]);
                     }
                 }
@@ -279,6 +289,15 @@ export class PackManager {
                 }
             });
         });
+    }
+
+    public removeDownloading (uuids: string[]): void {
+        for (let i = 0, l = uuids.length; i < l; i++) {
+            const uuid = uuids[i];
+            if (this._loading.has(uuid)) {
+                this._loading.remove(uuid);
+            }
+        }
     }
 }
 

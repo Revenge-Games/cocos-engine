@@ -43,6 +43,7 @@ export enum AudioType {
 
 export interface AudioLoadOptions {
     audioLoadMode?: AudioType,
+    [p: string]: any,
 }
 
 export enum AudioState {

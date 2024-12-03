@@ -23,7 +23,7 @@
 */
 
 import { EDITOR_NOT_IN_PREVIEW } from 'internal:constants';
-import { AudioPCMDataView, AudioEvent, AudioState, AudioType } from '../type';
+import { AudioPCMDataView, AudioEvent, AudioState, AudioType, AudioLoadOptions } from '../type';
 import { EventTarget } from '../../../cocos/core/event';
 import { clamp01 } from '../../../cocos/core';
 import * as debug from '../../../cocos/core/platform/debug';
@@ -262,14 +262,14 @@ export class AudioPlayerWeb implements OperationQueueable {
         game.off(Game.EVENT_RESUME, this._onInterruptedEnd, this);
         this.offRunning();
     }
-    static load (url: string): Promise<AudioPlayerWeb> {
+    static load (url: string, opts?: AudioLoadOptions): Promise<AudioPlayerWeb> {
         return new Promise((resolve) => {
-            AudioPlayerWeb.loadNative(url).then((audioBuffer) => {
+            AudioPlayerWeb.loadNative(url, opts).then((audioBuffer) => {
                 resolve(new AudioPlayerWeb(audioBuffer, url));
             }).catch((e) => { debug.warn('load error', url, e); });
         });
     }
-    static loadNative (url: string): Promise<AudioBuffer> {
+    static loadNative (url: string, opts?: AudioLoadOptions): Promise<AudioBuffer> {
         return new Promise((resolve, reject) => {
             const cachedAudioBuffer = audioBufferManager.getCache(url);
             if (cachedAudioBuffer) {

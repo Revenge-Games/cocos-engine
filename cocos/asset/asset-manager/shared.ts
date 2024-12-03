@@ -28,6 +28,8 @@ import Bundle from './bundle';
 import Cache from './cache';
 import { Pipeline } from './pipeline';
 import WeakCache from './weak-cache';
+import { releaseManager } from './release-manager';
+import { cclegacy } from '../../core';
 
 export const assets = EDITOR ? new WeakCache<Asset>() : new Cache<Asset>();
 export const files = new Cache();
@@ -137,3 +139,23 @@ export enum BuiltinBundleName {
      */
     START_SCENE = 'start-scene',
 }
+
+export const removeFilesCache = (ids: string[]): void => {
+    for (let i = 0, l = ids.length; i < l; i++) {
+        const id = ids[i];
+
+        if (files.has(id)) {
+            files.remove(id);
+        }
+        if (parsed.has(id)) {
+            parsed.remove(id);
+        }
+
+        if (files.has(`${id}@import`)) {
+            files.remove(`${id}@import`);
+        }
+        if (parsed.has(`${id}@import`)) {
+            parsed.remove(`${id}@import`);
+        }
+    }
+};
