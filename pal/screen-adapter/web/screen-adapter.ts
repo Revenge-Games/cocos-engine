@@ -176,10 +176,21 @@ class ScreenAdapter extends EventTarget {
         this._updateContainer();
     }
 
+    public get isProportionalToFrameFixedWidth (): boolean {
+        return this._isProportionalToFrameFixedWidth;
+    }
+    public set isProportionalToFrameFixedWidth (v: boolean) {
+        if (this._isProportionalToFrameFixedWidth === v) {
+            return;
+        }
+        this._isProportionalToFrameFixedWidth = v;
+    }
+
     private _gameFrame?: HTMLDivElement;
     private _gameContainer?: HTMLDivElement;
     private _gameCanvas?: HTMLCanvasElement;
     private _isProportionalToFrame = false;
+    private _isProportionalToFrameFixedWidth = false;
     private _cachedFrameStyle: ICachedStyle = { width: '0px', height: '0px' };
     private _cachedContainerStyle: ICachedStyle = { width: '0px', height: '0px' };
     private _cbToUpdateFrameBuffer?: () => void;
@@ -447,9 +458,9 @@ class ScreenAdapter extends EventTarget {
             this._gameFrame.style.width = `${sizeInCssPixels.width}px`;
             this._gameFrame.style.height = `${sizeInCssPixels.height}px`;
         } else {
-            if(this._gameFrame.parentElement === null) return;
+            if (this._gameFrame.parentElement === null) return;
 
-            const winWidth = this._gameFrame.parentElement.clientWidth; 
+            const winWidth = this._gameFrame.parentElement.clientWidth;
             const winHeight = this._gameFrame.parentElement.clientHeight;
             if (this.isFrameRotated) {
                 this._gameFrame.style['-webkit-transform'] = 'rotate(90deg)';
@@ -542,7 +553,7 @@ class ScreenAdapter extends EventTarget {
 
             if (scaleX < scaleY) {
                 containerW = frameW;
-                containerH = designH * scaleX;
+                containerH = this.isProportionalToFrameFixedWidth ? frameH : designH * scaleX;
             } else {
                 containerW = designW * scaleY;
                 containerH = frameH;

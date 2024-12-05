@@ -44,6 +44,8 @@ declare module 'pal/screen-adapter' {
          */
         public get isProportionalToFrame (): boolean;
         public set isProportionalToFrame (v: boolean);
+        public get isProportionalToFrameFixedWidth (): boolean;
+        public set isProportionalToFrameFixedWidth (v: boolean);
         /**
          * In some case we don't want to handle the resize event.
          * For example, when the soft keyboard shows up, we don't want to resize the canvas.
