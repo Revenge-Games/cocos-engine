@@ -90,6 +90,7 @@ export abstract class WebViewImpl {
     get loaded (): boolean { return this._loaded; }
     get componentEventList (): Map<EventType, (...args: any) => void> { return this._componentEventList; }
     get webview (): HTMLIFrameElement | null { return this._webview; }
+    get wrapper (): HTMLDivElement | null { return this._wrapper; }
     get state (): EventType { return this._state; }
     get UICamera (): Camera | null {
         return director.root!.batcher2D.getFirstRenderCamera(this._node!);

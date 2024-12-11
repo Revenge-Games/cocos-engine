@@ -96,6 +96,10 @@ export class WebView extends Component {
         return (this._impl && this._impl.webview) || null;
     }
 
+    get wrapper (): HTMLDivElement | null {
+        return (this._impl && this._impl.wrapper) || null;
+    }
+
     /**
      * @en
      * Gets the current webview state.
