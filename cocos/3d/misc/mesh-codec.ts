@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 */
-import { CULL_MESHOPT, WASM_SUPPORT_MODE } from 'internal:constants';
+import { CULL_MESHOPT, CULL_ASM_JS_MODULE, WASM_SUPPORT_MODE } from 'internal:constants';
 import { ensureWasmModuleReady, instantiateWasm } from 'pal/wasm';
 
 import { sys, logID } from '../../core';
@@ -90,6 +90,6 @@ export function InitDecoder (): Promise<void> {
     }));
 }
 
-if (!CULL_MESHOPT) {
+/*if (!CULL_MESHOPT) {
     game.onPostInfrastructureInitDelegate.add(InitDecoder);
-}
+}*/

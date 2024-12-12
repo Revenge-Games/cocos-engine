@@ -46,8 +46,10 @@ function initWasm (wasmFactory, wasmUrl): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const errorMessage = (err: any): string => `[Spine]: Spine wasm load failed: ${err}`;
         wasmFactory({
-            instantiateWasm (importObject: WebAssembly.Imports,
-                receiveInstance: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void) {
+            instantiateWasm (
+                importObject: WebAssembly.Imports,
+                receiveInstance: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
+            ) {
                 // NOTE: the Promise return by instantiateWasm hook can't be caught.
                 instantiateWasm(wasmUrl, importObject).then((result: any) => {
                     receiveInstance(result.instance, result.module);
@@ -102,20 +104,20 @@ function shouldUseWasmModule (): boolean {
 export function waitForSpineWasmInstantiation (): Promise<void> {
     const errorReport = (msg: any): void => { error(msg); };
     return ensureWasmModuleReady().then(() => Promise.all([
-        import('external:emscripten/spine/spine.asm.js'),
-        import('external:emscripten/spine/spine.js.mem'),
+        // import('external:emscripten/spine/spine.asm.js'),
+        // import('external:emscripten/spine/spine.js.mem'),
         import('external:emscripten/spine/spine.wasm.js'),
         import('external:emscripten/spine/spine.wasm'),
     ]).then(([
-        { default: asmFactory },
-        { default: asmJsMemUrl },
+        // { default: asmFactory },
+        // { default: asmJsMemUrl },
         { default: wasmFactory },
         { default: spineWasmUrl },
     ]) => {
         if (shouldUseWasmModule()) {
             return initWasm(wasmFactory, spineWasmUrl);
         } else {
-            return initAsmJS(asmFactory, asmJsMemUrl);
+            // return initAsmJS(asmFactory, asmJsMemUrl);
         }
     })).catch(errorReport);
 }
