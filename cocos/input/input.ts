@@ -30,6 +30,7 @@ import { touchManager } from '../../pal/input/touch-manager';
 import { EventTarget, error, sys } from '../core';
 import { Event, EventAcceleration, EventGamepad, EventHandle, EventHandheld, EventHMD, EventKeyboard, EventMouse, EventTouch, Touch } from './types';
 import { InputEventType } from './types/event-enum';
+import { InputSource } from '../../pal/input/input-source';
 
 export enum EventDispatcherPriority {
     GLOBAL = 0,
@@ -149,6 +150,14 @@ export class Input {
 
     private _inputEventDispatcher: InputEventDispatcher;
     private _eventDispatcherList: IEventDispatcher[] = [];
+
+    get touchInput (): TouchInputSource {
+        return this._touchInput;
+    }
+
+    get mouseInput (): MouseInputSource {
+        return this._mouseInput;
+    }
 
     constructor () {
         this._registerEvent();
