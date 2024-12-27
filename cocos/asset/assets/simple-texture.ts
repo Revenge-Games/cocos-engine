@@ -23,8 +23,17 @@
 */
 
 import { ccclass } from 'cc.decorator';
-import { DEV } from 'internal:constants';
-import { TextureFlagBit, TextureUsageBit, API, Texture, TextureInfo, TextureViewInfo, Device, BufferTextureCopy } from '../../gfx';
+import { DEV, BUILD } from 'internal:constants';
+import {
+    TextureFlagBit,
+    TextureUsageBit,
+    API,
+    Texture,
+    TextureInfo,
+    TextureViewInfo,
+    Device,
+    BufferTextureCopy,
+} from '../../gfx';
 import { assertID, error, js, macro, cclegacy } from '../../core';
 import { Filter } from './asset-enum';
 import { ImageAsset } from './image-asset';
@@ -322,6 +331,15 @@ export class SimpleTexture extends TextureBase {
         const texture = device.createTexture(textureCreateInfo);
         this._textureWidth = textureCreateInfo.width;
         this._textureHeight = textureCreateInfo.height;
+
+        // Upscale on compress version
+        if (BUILD && macro.CUSTOM_MACRO.IS_COMPRESS_VERSION && this.isCompressed) {
+            const compressRatio = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100;
+            if (compressRatio) {
+                this._width = Math.round(textureCreateInfo.width / compressRatio);
+                this._height = Math.round(textureCreateInfo.height / compressRatio);
+            }
+        }
 
         this._gfxTexture = texture;
     }
