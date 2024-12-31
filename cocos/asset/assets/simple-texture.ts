@@ -23,7 +23,7 @@
 */
 
 import { ccclass } from 'cc.decorator';
-import { DEV, BUILD } from 'internal:constants';
+import { DEV } from 'internal:constants';
 import {
     TextureFlagBit,
     TextureUsageBit,
@@ -331,15 +331,6 @@ export class SimpleTexture extends TextureBase {
         const texture = device.createTexture(textureCreateInfo);
         this._textureWidth = textureCreateInfo.width;
         this._textureHeight = textureCreateInfo.height;
-
-        // Upscale on compress version
-        if (BUILD && macro.CUSTOM_MACRO.IS_COMPRESS_VERSION && this.isCompressed) {
-            const compressRatio = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100;
-            if (compressRatio) {
-                this._width = Math.round(textureCreateInfo.width / compressRatio);
-                this._height = Math.round(textureCreateInfo.height / compressRatio);
-            }
-        }
 
         this._gfxTexture = texture;
     }

@@ -23,13 +23,13 @@
  THE SOFTWARE.
 */
 
-import { EDITOR, TEST } from 'internal:constants';
+import { BUILD, EDITOR, TEST } from 'internal:constants';
 import { ccclass, type } from 'cc.decorator';
-import { TextureType, TextureInfo, TextureViewInfo } from '../../gfx';
-import { Filter, PixelFormat } from './asset-enum';
+import { Device, TextureInfo, TextureType, TextureViewInfo } from '../../gfx';
+import { PixelFormat } from './asset-enum';
 import { ImageAsset } from './image-asset';
 import { PresumedGFXTextureInfo, PresumedGFXTextureViewInfo, SimpleTexture } from './simple-texture';
-import { js, cclegacy } from '../../core';
+import { cclegacy, js, macro } from '../../core';
 
 /**
  * @en The create information for [[Texture2D]].
@@ -353,6 +353,27 @@ export class Texture2D extends SimpleTexture {
 
     public validate (): boolean {
         return this.mipmaps && this.mipmaps.length !== 0;
+    }
+
+    protected _createTexture (device: Device): void {
+        super._createTexture(device);
+        // Upscale on compress version
+        if (this.isCustomCompressTexture()) {
+            const compressRatio = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100;
+            if (compressRatio) {
+                this._width = Math.round(this.width / compressRatio);
+                this._height = Math.round(this.height / compressRatio);
+            }
+        }
+    }
+
+    protected isCustomCompressTexture (): boolean {
+        const isCompressVersion = BUILD && macro.CUSTOM_MACRO.IS_COMPRESS_VERSION as boolean;
+        return isCompressVersion && this.isExternalTexture();
+    }
+
+    private isExternalTexture (): boolean {
+        return this.mipmaps !== undefined && this.image != null && this.image.nativeUrl !== '';
     }
 }
 
