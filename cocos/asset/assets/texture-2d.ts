@@ -361,8 +361,8 @@ export class Texture2D extends SimpleTexture {
         if (this.isCustomCompressTexture()) {
             const compressRatio = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100;
             if (compressRatio) {
-                this._width = Math.round(this.width / compressRatio);
-                this._height = Math.round(this.height / compressRatio);
+                this._width = Math.round(this._width / compressRatio);
+                this._height = Math.round(this._height / compressRatio);
             }
         }
     }
@@ -373,7 +373,7 @@ export class Texture2D extends SimpleTexture {
     }
 
     private isExternalTexture (): boolean {
-        return this.mipmaps !== undefined && this.image != null && this.image.nativeUrl !== '';
+        return this.mipmaps !== undefined && this.image !== null && this.image.nativeUrl !== '';
     }
 }
 
