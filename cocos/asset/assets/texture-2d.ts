@@ -359,17 +359,14 @@ export class Texture2D extends SimpleTexture {
         super._createTexture(device);
         // Upscale on compress version
         if (this.isCustomCompressTexture()) {
-            const compressRatio = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100;
-            if (compressRatio) {
-                this._width = Math.round(this._width / compressRatio);
-                this._height = Math.round(this._height / compressRatio);
-            }
+            const compressRatio = (Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT) / 100) || 1;
+            this._width = Math.round(this._width / compressRatio);
+            this._height = Math.round(this._height / compressRatio);
         }
     }
 
     protected isCustomCompressTexture (): boolean {
-        const isCompressVersion = BUILD && macro.CUSTOM_MACRO.IS_COMPRESS_VERSION as boolean;
-        return isCompressVersion && this.isExternalTexture();
+        return BUILD && this.isExternalTexture();
     }
 
     private isExternalTexture (): boolean {
