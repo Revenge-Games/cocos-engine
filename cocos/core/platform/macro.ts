@@ -1072,6 +1072,8 @@ interface Macro {
      */
     CUSTOM_PIPELINE_NAME: string;
 
+    // add custom macro variable
+    CUSTOM_MACRO: Record<string, string | number | boolean>;
     /**
      * @internal
      */
@@ -1105,6 +1107,7 @@ const macro: Macro = {
     ENABLE_WEBGL_HIGHP_STRUCT_VALUES: false,
     BATCHER2D_MEM_INCREMENT: 144,
     CUSTOM_PIPELINE_NAME: '',
+    CUSTOM_MACRO: {},
     init () {
         if (NATIVE || MINIGAME || RUNTIME_BASED) {
             this.CLEANUP_IMAGE_CACHE = true;
