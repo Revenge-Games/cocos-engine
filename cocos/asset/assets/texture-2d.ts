@@ -366,7 +366,7 @@ export class Texture2D extends SimpleTexture {
     }
 
     protected isCustomCompressTexture (): boolean {
-        return BUILD && this.isExternalTexture();
+        return BUILD && macro.CUSTOM_MACRO.IS_COMPRESSED_VERSION === true && this.isExternalTexture();
     }
 
     private isExternalTexture (): boolean {

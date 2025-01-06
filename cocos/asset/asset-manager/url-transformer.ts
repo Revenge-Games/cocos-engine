@@ -23,7 +23,7 @@
 */
 
 import { EDITOR, PREVIEW } from 'internal:constants';
-import { warnID, js, path, cclegacy } from '../../core';
+import { warnID, js, path, cclegacy, macro } from '../../core';
 import Config, { IAddressableInfo, IAssetInfo } from './config';
 import { decodeUuid } from './helper';
 import RequestItem from './request-item';
@@ -200,6 +200,14 @@ export function combine (task: Task): any {
             base = (config && config.nativeBase) ? (config.base + config.nativeBase) : cclegacy.assetManager.generalNativeBase;
         } else {
             base = (config && config.importBase) ? (config.base + config.importBase) : cclegacy.assetManager.generalImportBase;
+        }
+
+        // change base url on compress version
+        if (macro.CUSTOM_MACRO.IS_COMPRESSED_VERSION === true) {
+            const compressPercent = Number(macro.CUSTOM_MACRO.COMPRESS_PERCENT);
+            if (compressPercent > 0 && compressPercent < 100) {
+                base = base.replace('assets', 'compressed-assets');
+            }
         }
 
         const uuid = item.overrideUuid || item.uuid;
