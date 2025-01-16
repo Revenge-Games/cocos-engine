@@ -92,6 +92,7 @@ export class Texture2D extends SimpleTexture {
     get mipmaps (): ImageAsset[] {
         return this._mipmaps;
     }
+
     set mipmaps (value) {
         this._mipmaps = value;
 
@@ -366,11 +367,19 @@ export class Texture2D extends SimpleTexture {
     }
 
     protected isCustomCompressTexture (): boolean {
-        return BUILD && macro.CUSTOM_MACRO.IS_COMPRESSED_VERSION === true && this.isExternalTexture();
+        return BUILD && macro.CUSTOM_MACRO.IS_COMPRESSED_VERSION === true && this.isExternalTexture() && !this.isIgnoreCustomCompress();
     }
 
     private isExternalTexture (): boolean {
         return this.mipmaps !== undefined && this.image !== null && this.image.nativeUrl !== '';
+    }
+
+    private isIgnoreCustomCompress (): boolean {
+        const arrayIgnoreCustomCompressUUIDs: string[] = macro.CUSTOM_MACRO.ARRAY_IGNORE_CUSTOM_COMPRESS_UUIDS;
+        if (arrayIgnoreCustomCompressUUIDs && this.image) {
+            return arrayIgnoreCustomCompressUUIDs.includes(this.image.uuid);
+        }
+        return false;
     }
 }
 
