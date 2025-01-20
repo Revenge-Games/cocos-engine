@@ -1073,7 +1073,7 @@ interface Macro {
     CUSTOM_PIPELINE_NAME: string;
 
     // add custom macro variable
-    CUSTOM_MACRO: Record<string, string | number | boolean>;
+    CUSTOM_MACRO: Record<string, any>;
     /**
      * @internal
      */
